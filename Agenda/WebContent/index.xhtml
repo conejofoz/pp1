@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Agenda de Compromissos</title>
+</h:head>
+<h:body>
+
+<h:form>
+<p:growl id="msgGrowl" showDetail="true"></p:growl>   
+
+   <p:schedule widgetVar="meuCalendario" value="#{eventoBean.eventModel}" id="schEvento" timeZone="America/Sao_Paulo">
+      <p:ajax event="eventSelect" listener="#{eventoBean.quandoSelecionado}" update="eventoDetalhe" oncomplete="PF('caixaDialog').show();"></p:ajax>
+      <p:ajax event="dateSelect" listener="#{eventoBean.quandoNovo}" update="eventoDetalhe" oncomplete="PF('caixaDialog').show();"></p:ajax>
+   </p:schedule>
+   
+   
+   <p:dialog widgetVar="caixaDialog" header="Evento" resizable="false" modal="true" showEffect="clip">
+
+      <p:outputPanel id="eventoDetalhe">
+         
+         <h:panelGrid columns="2">
+               <p:outputLabel value="Título"></p:outputLabel>
+               <p:inputText value="#{eventoBean.evento.titulo}"></p:inputText>
+            
+               <p:outputLabel value="Inicio"></p:outputLabel>
+               <p:calendar value="#{eventoBean.evento.inicio}" pattern="dd/MM/yyyy"></p:calendar>
+
+               <p:outputLabel value="Fim"></p:outputLabel>
+               <p:calendar value="#{eventoBean.evento.fim}" pattern="dd/MM/yyyy"></p:calendar>
+            
+               <p:outputLabel value="Status"></p:outputLabel>
+               <p:selectBooleanCheckbox value="#{eventoBean.evento.status}"></p:selectBooleanCheckbox>
+            
+               <p:outputLabel value="Descrição"></p:outputLabel>
+               <p:inputText value="#{eventoBean.evento.descricao}" ></p:inputText>
+         </h:panelGrid>
+         
+         <p:separator></p:separator>
+         
+         <p:commandButton value="Salvar" actionListener="#{eventoBean.salvar}" update="msgGrowl schEvento" oncomplete="PF('caixaDialog').hide();" ></p:commandButton>
+      
+      </p:outputPanel>
+
+   </p:dialog>
+
+
+</h:form>
+
+</h:body>
+</html>
